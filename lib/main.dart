@@ -43,9 +43,8 @@ void main() async {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),
       home: ChangeNotifierProvider(
-        create: (_) => NakamaProvider(nakamaInstance: nakamaInstance),
-        child: InitGame()
-      ),
+          create: (_) => NakamaProvider(nakamaInstance: nakamaInstance),
+          child: InitGame()),
     ),
   );
 }

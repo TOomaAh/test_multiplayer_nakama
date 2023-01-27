@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nakama/nakama.dart';
 
 class NakamaProvider extends ChangeNotifier {
-
   final Nakama nakamaInstance;
   late Session session;
   NakamaProvider({required this.nakamaInstance});
@@ -11,17 +10,18 @@ class NakamaProvider extends ChangeNotifier {
     session = await nakamaInstance.authenticate();
   }
 
-  createMatch() async {
+  initWebSocket() {
     NakamaWebsocketClient.init(
       host: '192.168.1.38',
       ssl: false,
       token: session.token,
     );
+  }
+
+  createMatch() async {
     return await NakamaWebsocketClient.instance.createMatch();
   }
-  
 }
-
 
 class Nakama {
   final String deviceId;

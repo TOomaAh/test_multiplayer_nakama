@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flutter_nakama/nakama.dart';
 import 'package:multiplayer/button.dart';
 import 'package:multiplayer/square.dart';
 
@@ -7,6 +8,8 @@ class PadComponent extends PositionComponent {
     required Vector2 position,
     required Vector2 size,
     required this.square,
+    required this.match,
+    required this.session,
   }) : super(
           position: position,
           size: size,
@@ -14,6 +17,9 @@ class PadComponent extends PositionComponent {
         );
 
   Square square;
+  final match;
+  final session;
+  bool isListening = false;
   ButtonDirection direction = ButtonDirection.idle;
 
   @override
@@ -40,25 +46,45 @@ class PadComponent extends PositionComponent {
           direction: ButtonDirection.down,
           directionOnTap: changeDirection),
     ]);
+
     return super.onLoad();
   }
 
   @override
-  void update(double dt) {
+  void update(double dt) async {
+    listen();
     if (direction == ButtonDirection.up) {
-      square.position.y -= 100 * dt;
+      square.position.y -= 10;
     } else if (direction == ButtonDirection.down) {
-      square.position.y += 100 * dt;
+      square.position.y += 10;
     } else if (direction == ButtonDirection.left) {
-      square.position.x -= 100 * dt;
+      square.position.x -= 10;
     } else if (direction == ButtonDirection.right) {
-      square.position.x += 100 * dt;
+      square.position.x += 10;
     }
     super.update(dt);
   }
 
-  void changeDirection(ButtonDirection direction) {
-    this.direction = direction;
+  void listen() {
+    if (isListening) return;
+    print("Start listening");
+    NakamaWebsocketClient.instance.onMatchData.listen((e) {
+      if (session.userId != e.presence.userId) {
+        direction = ButtonDirection.values[e.opCode.toInt()];
+      }
+    });
+    isListening = true;
+  }
+
+  void changeDirection(ButtonDirection direction) async {
+    NakamaWebsocketClient.instance
+        .sendMatchData(
+          matchId: match.matchId,
+          opCode: Int64(direction.index),
+          data: direction.name.codeUnits,
+        )
+        .then((value) => value);
+    //this.direction = direction;
   }
 
   @override

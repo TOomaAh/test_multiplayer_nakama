@@ -15,13 +15,13 @@ class _InitGameState extends State<InitGame> {
   @override
   void initState() {
     super.initState();
-    Provider.of<NakamaProvider>(context, listen: false).init();
   }
 
   @override
   Widget build(BuildContext context) {
+    MultiplayerGame multiplayerGame = MultiplayerGame(context: context);
     return GameWidget<MultiplayerGame>(
-      game: MultiplayerGame(),
+      game: multiplayerGame,
     );
   }
 }
