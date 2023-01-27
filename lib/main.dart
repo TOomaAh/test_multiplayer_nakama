@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:multiplayer/init.dart';
+import 'package:multiplayer/nakama_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
@@ -33,12 +36,15 @@ void main() async {
     deviceId = prefs.getString('uuid')!;
   }
 
+  Nakama nakamaInstance = Nakama(deviceId: deviceId);
+
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),
-      home: GameWidget<MultiplayerGame>(
-        game: MultiplayerGame(deviceId: deviceId),
+      home: ChangeNotifierProvider(
+        create: (_) => NakamaProvider(nakamaInstance: nakamaInstance),
+        child: InitGame()
       ),
     ),
   );
