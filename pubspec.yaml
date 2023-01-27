@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   flame: 1.5.0
+  flutter_nakama: ^0.1.0
 
 dev_dependencies:
   flutter_test:
