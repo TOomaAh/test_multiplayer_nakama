@@ -1,9 +1,20 @@
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
+import 'package:multiplayer/nakama.dart';
 import 'package:multiplayer/pad.dart';
 import 'package:multiplayer/square.dart';
 
 class MultiplayerGame extends FlameGame with HasTappableComponents {
+  final String deviceId;
+  late final nakama;
+  late final session;
+
+  MultiplayerGame({required this.deviceId}) : super() {
+    nakama = Nakama();
+    nakama.setDeviceId(deviceId);
+    session = nakama.getSession();
+  }
+
   @override
   Future<void> onLoad() async {
     print("MultiplayerGame.onLoad() called");

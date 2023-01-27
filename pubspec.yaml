@@ -13,6 +13,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   flame: 1.5.0
   flutter_nakama: ^0.1.0
+  device_info_plus: ^8.0.0
+  uuid: ^3.0.6
+  shared_preferences: ^2.0.17
 
 dev_dependencies:
   flutter_test:
